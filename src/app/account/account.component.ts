@@ -2,6 +2,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { BankingService } from './../service/banking.service';
 import { Component, OnInit } from '@angular/core';
 import { AlertController } from '@ionic/angular';
+import { localId, tokenId } from '../shared/util/';
 
 @Component({
   selector: 'app-account',
@@ -32,7 +33,8 @@ export class AccountComponent implements OnInit {
 
 
   constructor(private bankingService: BankingService, private alertController: AlertController) {
-    this.getAuth();
+    this.idToken = tokenId;
+    this.localId = localId;
     this.createOperationForm();
   }
 
@@ -42,7 +44,7 @@ export class AccountComponent implements OnInit {
   }
 
   getAccountNumber() {
-    this.account.number = localStorage.getItem('account');
+    this.account.number = atob(localStorage.getItem('account'));
   }
 
   getAccount() {
@@ -64,12 +66,6 @@ export class AccountComponent implements OnInit {
       amount: new FormControl(null, Validators.required),
     }));
   }
-
-  getAuth() {
-    this.idToken = localStorage.getItem('idToken');
-    this.localId = localStorage.getItem('localId');
-  }
-
 
   updateAccount() {
     let updatedBalance = 0;
@@ -117,6 +113,6 @@ export class AccountComponent implements OnInit {
   }
 
   clearAmount() {
-    this.operationForm.controls.amount.setValue("");
+    this.operationForm.controls.amount.setValue('');
   }
 }

@@ -3,7 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { BankingService } from '../service/banking.service';
 import { json } from '@angular-devkit/core';
 import { AlertController } from '@ionic/angular';
-
+import { BinaryOperator } from '@angular/compiler';
+import { localId, tokenId } from '../shared/util/';
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -13,9 +14,13 @@ export class HomePage implements OnInit {
   accounts: any[] = [];
   private idToken = null;
   private localId = null;
+  private email = null;
   constructor(private bankingService: BankingService, private route: Router, private alertController: AlertController) {
-    this.getAuth();
+    this.idToken = tokenId;
+    this.localId = localId;
+    this.email = localStorage.getItem('email');
     this.accountDetails();
+
   }
 
   ngOnInit(): void {
@@ -31,7 +36,7 @@ export class HomePage implements OnInit {
   }
 
   openAccount(account: string) {
-    localStorage.setItem('account', account);
+    localStorage.setItem('account', btoa(account));
     this.route.navigate(['account']);
   }
 
@@ -44,12 +49,6 @@ export class HomePage implements OnInit {
         this.presentAlert('Error in creating account');
       }
     });
-  }
-
-  getAuth() {
-
-    this.idToken = localStorage.getItem('idToken');
-    this.localId = localStorage.getItem('localId');
   }
 
   async presentAlert(message) {

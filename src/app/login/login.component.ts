@@ -34,8 +34,9 @@ export class LoginComponent implements OnInit {
       this.loginService.login(this.extractCredential()).subscribe((response: any) => {
         if (response.idToken) {
           localStorage.clear();
-          localStorage.setItem('idToken', response.idToken);
-          localStorage.setItem('localId', response.localId);
+          localStorage.setItem('idToken', btoa(response.idToken));
+          localStorage.setItem('localId', btoa(response.localId));
+          localStorage.setItem('email', this.loginForm.controls.email.value);
           this.router.navigate(['home']);
         }
       });
