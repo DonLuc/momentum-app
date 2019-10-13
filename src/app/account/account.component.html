@@ -1,0 +1,53 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      Account - {{account.number}}
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card class="welcome-card">
+    <!--
+    <h5>Balance: {{account.balance | currency: 'R' }}</h5>
+    <h5>Overdraft:{{account.overdraft | currency: 'R'}} </h5>
+    -->
+    <ion-grid>
+      <ion-row>
+        <ion-col col-6>Balance: </ion-col>
+        <ion-col col-6>
+          <b>{{account.balance | currency: 'R' }}</b>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col col-6>Overdraft: </ion-col>
+        <ion-col col-6>
+          <b>{{account.overdraft | currency: 'R' }}</b>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card>
+  <ion-grid *ngIf="operation !== null">
+    <ion-row>
+      <ion-col col-12>
+        <form [formGroup]="operationForm">
+          <ion-input placeholder="Enter amount to {{operation}}" formControlName="amount"></ion-input>
+        </form>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col col-12>
+        <ion-button color="primary" shape="round" color="success" expand="full" (click)="updateAccount()">{{operation}}</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-list lines="none">
+    <ion-item *ngFor="let operation of operations; let i = index;" (click)="doOperation(operation.operation)">
+      <ion-icon slot="start" color="medium" name="{{operation.icon}}"></ion-icon>
+      <ion-label>{{operation.operation}} </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>
